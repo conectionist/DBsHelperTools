@@ -52,6 +52,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Win32.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -61,6 +70,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -73,6 +86,66 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency15.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency20.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency25.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency30.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency35.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency40.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency45.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency55.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency60.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency65.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency70.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency75.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency80.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency85.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency90.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency95.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="transparency levels\Transparency100.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
