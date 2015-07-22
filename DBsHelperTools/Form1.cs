@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,6 @@ namespace DBsHelperTools
 {
     public partial class Form1 : Form
     {
-        Point oldPoint = new Point(0, 0);
         bool haveHandle = false;
         float left = 0f, top = 0f;
 
@@ -155,8 +155,81 @@ namespace DBsHelperTools
         {
             await ShowSplashScreen();
 
+            AddTools();
+
             notifyIcon1.ContextMenuStrip = contextMenuStrip1;
             notifyIcon1.Icon = Resource1.toolbox;
+        }
+
+        private void AddTools()
+        {
+            string[] tools = GetAvailableTools();
+            string toolsPath = Directory.GetCurrentDirectory() + "\\Tools"; 
+
+            foreach (string tool in tools)
+            {
+                ToolStripMenuItem genericToolStripMenuItem = new ToolStripMenuItem();
+
+                genericToolStripMenuItem.Name = tool + "_ToolStripMenuItem";
+                genericToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+                genericToolStripMenuItem.Text = tool;
+                genericToolStripMenuItem.Click += new System.EventHandler(this.genericToolStripMenuItem_Click);
+                genericToolStripMenuItem.Image = Icon.ExtractAssociatedIcon(string.Format("{0}\\{1}\\{2}.exe",toolsPath, tool, tool)).ToBitmap();
+
+                this.contextMenuStrip1.Items.Add(genericToolStripMenuItem);
+            }
+
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+
+            // add a separator
+            this.contextMenuStrip1.Items.Add("-");
+
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+        }
+
+        private string[] GetAvailableTools()
+        {
+            string[] directories = Directory.GetDirectories(Directory.GetCurrentDirectory());
+            int i = -1;
+            for (i = 0; i < directories.Length; i++ )
+            {
+                if (directories[i].EndsWith("Tools"))
+                    break;
+            }
+
+            if (i >= directories.Length)
+                return new string[] { };
+
+            string[] toolPaths = Directory.GetDirectories(directories[i]);
+            if (toolPaths.Length <= 0)
+                return new string[] { };
+
+            List<string> validTools = new List<string>();
+
+            foreach (string toolPath in toolPaths)
+            {
+                if (IsValidTool(toolPath))
+                    validTools.Add(Path.GetFileName(toolPath));
+            }
+
+            return validTools.ToArray();
+        }
+
+        private bool IsValidTool(string toolPath)
+        {
+            return true;
         }
 
         private async Task<bool> ShowSplashScreen()
@@ -167,6 +240,8 @@ namespace DBsHelperTools
                 await Task.Delay(50);
             }
 
+            await Task.Delay(1500);
+
             Hide();
 
             return true;
@@ -175,6 +250,20 @@ namespace DBsHelperTools
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void genericToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string path =
+                Directory.GetCurrentDirectory() + "\\" +
+                "Tools" + "\\" +
+                sender.ToString() + "\\" +
+                sender.ToString() + ".exe";
+
+            if(File.Exists(path))
+            {
+                System.Diagnostics.Process.Start(path);
+            }
         }
     }
 }
