@@ -14,14 +14,10 @@ namespace DBsHelperTools
     {
         Point oldPoint = new Point(0, 0);
         bool haveHandle = false;
-        Timer timerSpeed = new Timer();
-        int count = 0;
         float left = 0f, top = 0f;
 
         int frameWidth = 100;
         int frameHeight = 100;
-
-        int keepSpashScreenSecs = 3;
 
         private Image[] transparencies = new Image[]
         {
@@ -59,9 +55,8 @@ namespace DBsHelperTools
             left = -frameWidth;
             top = Screen.PrimaryScreen.WorkingArea.Height / 2f;
 
-            timerSpeed.Interval = 50;
-            timerSpeed.Enabled = true;
-            timerSpeed.Tick += new EventHandler(timerSpeed_Tick);
+            this.Left = Screen.PrimaryScreen.WorkingArea.Width / 2 - this.Width;
+            this.Top = Screen.PrimaryScreen.WorkingArea.Height / 2 - this.Height;
         }
 
         #region Override
@@ -97,27 +92,6 @@ namespace DBsHelperTools
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.UserPaint, true);
             UpdateStyles();
-        }
-
-        void timerSpeed_Tick(object sender, EventArgs e)
-        {
-            if (count >= transparencies.Length)
-            {
-                timerSpeed.Interval = 1000;
-                keepSpashScreenSecs--;
-
-                if (keepSpashScreenSecs <= 0)
-                    Application.Exit();
-
-                return;
-            }
-
-            this.Left = Screen.PrimaryScreen.WorkingArea.Width / 2 - this.Width;
-            this.Top = Screen.PrimaryScreen.WorkingArea.Height / 2 - this.Height;
-
-            SetBits(FrameImage(count));
-
-            count++;
         }
 
         private Image FullImage(int i)
@@ -175,6 +149,32 @@ namespace DBsHelperTools
                 Win32.ReleaseDC(IntPtr.Zero, screenDC);
                 Win32.DeleteDC(memDc);
             }
+        }
+
+        private async void Form1_Load(object sender, EventArgs e)
+        {
+            await ShowSplashScreen();
+
+            notifyIcon1.ContextMenuStrip = contextMenuStrip1;
+            notifyIcon1.Icon = Resource1.toolbox;
+        }
+
+        private async Task<bool> ShowSplashScreen()
+        {
+            for (int i = 0; i < transparencies.Length; i++ )
+            {
+                SetBits(FrameImage(i));
+                await Task.Delay(50);
+            }
+
+            Hide();
+
+            return true;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
