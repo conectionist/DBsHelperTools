@@ -19,6 +19,10 @@ namespace DBsHelperTools
         int frameWidth = 100;
         int frameHeight = 100;
 
+        ToolBar toolBarWindow;
+
+        bool bUseToolBar;
+
         private Image[] transparencies = new Image[]
         {
             Resource1.Transparency5,
@@ -57,6 +61,10 @@ namespace DBsHelperTools
 
             this.Left = Screen.PrimaryScreen.WorkingArea.Width / 2 - this.Width;
             this.Top = Screen.PrimaryScreen.WorkingArea.Height / 2 - this.Height;
+
+            toolBarWindow = new ToolBar();
+
+            bUseToolBar = true;
         }
 
         #region Override
@@ -159,6 +167,8 @@ namespace DBsHelperTools
 
             notifyIcon1.ContextMenuStrip = contextMenuStrip1;
             notifyIcon1.Icon = Resource1.toolbox;
+
+            toolBarWindow.Show();
         }
 
         private void AddTools()
@@ -170,13 +180,19 @@ namespace DBsHelperTools
             {
                 ToolStripMenuItem genericToolStripMenuItem = new ToolStripMenuItem();
 
-                genericToolStripMenuItem.Name = tool + "_ToolStripMenuItem";
-                genericToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-                genericToolStripMenuItem.Text = tool;
-                genericToolStripMenuItem.Click += new System.EventHandler(this.genericToolStripMenuItem_Click);
-                genericToolStripMenuItem.Image = Icon.ExtractAssociatedIcon(string.Format("{0}\\{1}\\{2}.exe",toolsPath, tool, tool)).ToBitmap();
-
-                this.contextMenuStrip1.Items.Add(genericToolStripMenuItem);
+                if(bUseToolBar)
+                {
+                    toolBarWindow.AddTool(new Tool(tool, Icon.ExtractAssociatedIcon(string.Format("{0}\\{1}\\{2}.exe", toolsPath, tool, tool)).ToBitmap()));
+                }
+                else
+                {
+                    genericToolStripMenuItem.Name = tool + "_ToolStripMenuItem";
+                    genericToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+                    genericToolStripMenuItem.Text = tool;
+                    genericToolStripMenuItem.Click += new System.EventHandler(this.genericToolStripMenuItem_Click);
+                    genericToolStripMenuItem.Image = Icon.ExtractAssociatedIcon(string.Format("{0}\\{1}\\{2}.exe", toolsPath, tool, tool)).ToBitmap();
+                    this.contextMenuStrip1.Items.Add(genericToolStripMenuItem);
+                }
             }
 
             // 
@@ -188,7 +204,8 @@ namespace DBsHelperTools
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
 
             // add a separator
-            this.contextMenuStrip1.Items.Add("-");
+            if (!bUseToolBar)
+                this.contextMenuStrip1.Items.Add("-");
 
             // 
             // contextMenuStrip1
